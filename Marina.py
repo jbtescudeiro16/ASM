@@ -3,7 +3,9 @@ import time
 from Agents.Boat import *
 from  Agents.CaisManager import *
 from Agents.LightHouse import *
+from Agents.MarinePolice import *
 from colorama import init, Fore
+from Behaviours.chooserandcais import *
 
 
 class Marine:
@@ -32,7 +34,17 @@ class Marine:
             lighthouse.set("jid", lighthousejid)
             res_lighthouse = lighthouse.start()
             res_lighthouse.result()
+            print("Agent Lighthouse Started |"+lighthousejid)
             #lighthouse.web.start(hostname="127.0.0.1", port="8080")
+
+
+            marinepolicejid="marinepolice"+jid
+            marinepolice = Marine_Police(marinepolicejid, pwd)
+            marinepolice.set("jid", marinepolicejid)
+            marinepolice.set("lighthouse",lighthousejid)
+            marinepolice_res = marinepolice.start()
+            marinepolice_res.result()
+            print("Agent MarinePolice Started |" + marinepolicejid)
 
             caismanagerjid = "caismanager" + jid
             caismanager = CaisManager(caismanagerjid, pwd)
@@ -41,6 +53,7 @@ class Marine:
             rescais.result()
 
             lighthouse.set("caismanager",caismanagerjid)
+            print("Agent CaisManager Started |" + caismanagerjid)
 
 
             for i in range(nr_boats):
@@ -49,20 +62,43 @@ class Marine:
                 boat = Boat(boat_jid, pwd)
                 boat.set("jid", boat_jid)
                 boat.set("lighthouse", lighthousejid)
-                if i < 3:
-                    boat.set("status", "permission2Park")
-                else:
-                    boat.set("status", "permission2Leave")
+                #if i < 3:
+                #    boat.set("status", "permission2Park")
+                #else:
+                boat.set("status", "permission2Leave")
 
                 boats[f'boat{i}'] = boat
                 boat.start()
 
-                print(boat)
                 if boat.get("status") == "permission2Leave":
-                    while boat.get("Type") == None:
+                    while boat.get("type") == None:
                         time.sleep(1)
-                    type = boat.get("type")
-                    print("TYPE Boat: ", type)
+                    print(boat.get("type"))
+                    print("DescargasOccupied"+str(lighthouse.get("DescargasOccupied")))
+                    print("CaisOccupied"+str(lighthouse.get("CaisOccupied")))
+                    if boat.get("type")=="Private":
+                            if lighthouse.get("CaisOccupied")== lighthouse.get("CaisTotal"):
+                                lista = ["Passenger Transport", "Cargo Transport"]
+                                random_element = random.choice(lista)
+                                boat.set("type",random_element)
+                                aux=lighthouse.get("DescargasOccupied")
+                                lighthouse.set("DescargasOccupied",aux+1)
+                                print(lighthouse.get("DescargasOccupied"))
+                            else :
+                                aux= lighthouse.get("CaisOccupied")
+                                lighthouse.set("CaisOccupied",aux+1)
+                    elif boat.get("type")=="Passenger Transport" or  boat.get("type")=="Cargo Transport" :
+                        if lighthouse.get("DescargasOccupied")== lighthouse.get("DescargasTotal"):
+                            boat.set("type","Private")
+                            aux = lighthouse.get("CaisOccupied")
+                            lighthouse.set("CaisOccupied", aux + 1)
+
+                        else:
+                            aux = lighthouse.get("DescargasOccupied")
+                            lighthouse.set("DescargasOccupied", aux + 1)
+                    behav1=AddTOrandCais()
+                    boat.add_behaviour(behav1)
+
 
             print("####################################################################################")
 
@@ -71,6 +107,7 @@ class Marine:
                 print(id)
                 p.stop()
             caismanager.stop()
+            lighthouse.stop()
             print("Agents finished")
 
 if __name__ == "__main__":

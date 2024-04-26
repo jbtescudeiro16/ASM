@@ -23,7 +23,7 @@ class CaisManager(agent.Agent):
                descargas = Cais("Commercial", f"cais{i}")
                self.get("cais").append(descargas)
 
-       aux=self.get("cais")
+
 
        behav1=CaisReceive()
        self.add_behaviour(behav1)
@@ -61,7 +61,6 @@ class CaisManager(agent.Agent):
 
     def parkboat(self, type, boat):
         for cais in self.get("cais"):
-            # print("HANGAR ID =", hangar.get_id(), " | AVAILABLE = ", hangar.get_availability())
             if type == cais.type and cais.get_availability() == True:
                 cais.set_plane(boat)
                 return cais
@@ -71,3 +70,23 @@ class CaisManager(agent.Agent):
         for cais in self.get("cais"):
             if boat == cais.boat:
                 cais.remove_boat()
+
+    def add_boattocais(self, boat):
+        for cais in self.get("cais"):
+            if boat.get_type()=="Private":
+                if cais.type=="Private" and cais.get_availability()==True:
+                    boat.set_cais(cais)
+                    cais.set_boat(boat.get_id())
+                    return cais
+            else:
+                if cais.type=="Commercial" and cais.get_availability()==True:
+                    boat.set_cais(cais)
+                    cais.set_boat(boat.get_id())
+                    return cais
+
+    def clearcais(self, boat):
+        for cais in self.get("cais"):
+            if boat.get_id() == cais.boat:
+                cais.remove_boat()
+
+

@@ -28,7 +28,8 @@ class CaisReceive(CyclicBehaviour):
                     else:
 
                         available = str(available) + " & " + id_c
-                        print(available)
+                        #print("Available")
+                        #print(available)
                         a2 = Message_Info(available, aux.get_boatinfo())
 
                     response = Message(to=str(msg.sender))
@@ -36,4 +37,18 @@ class CaisReceive(CyclicBehaviour):
                     response.set_metadata("performative", "confirm")
                     await self.send(response)
 
+                if aux.get_type() == "ADD2RANDCAIS":
+
+                  cais = self.agent.add_boattocais(aux.get_boatinfo())
+                  resp = Message(to=str(msg.sender))
+
+                  resp.set_metadata("performative", "confirm")
+                  resp.body=jsonpickle.encode( Message_Info(f"Beginning Cais & {cais}",aux.get_boatinfo()))
+                  await self.send(resp)
+
+            if msg.get_metadata("performative") == ("inform"):
+                aux=jsonpickle.decode(msg.body)
+                type=aux.get_type()
+                if type=="BOAT_UNDOCKING":
+                    self.agent.clearcais(aux.get_boatinfo())
 
