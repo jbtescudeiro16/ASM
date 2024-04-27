@@ -28,6 +28,7 @@ class Channel:
     def set_boat(self, boat, state):
         self.boat = boat
         self.state_boat = state
+        self.available=False
 
     def remove_boat(self):
         self.boat = None

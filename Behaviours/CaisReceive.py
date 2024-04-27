@@ -11,7 +11,7 @@ class CaisReceive(CyclicBehaviour):
         msg = await self.receive()
         if msg:
             if msg.get_metadata("performative") == ("request"):
-                #print("REcebi msg no cais ")
+                print("Recebi pedido para estacionar no cais")
                 aux = jsonpickle.decode(msg.body)
                 if aux.get_type()=="FreePark?":
                     channels= aux.get_channels()
@@ -19,23 +19,28 @@ class CaisReceive(CyclicBehaviour):
                     for c in channels:
                         id_c, xy = c
                         cleanchannels[id_c] = xy
+                    channel, cais_available = self.agent.closest_available(aux.get_boatinfo().get_type(), aux.get_boatinfo().get_jid(), cleanchannels)
 
-                    id_channel, available = self.agent.closest_available(aux.get_boatinfo().get_type(), aux.get_boatinfo().get_jid(), cleanchannels)
 
-                    if available == None:
-                        available = "All Cais Occupied"
+                    if cais_available == None:
+
+                        available = "NOFREECAIS"
                         a2=Message_Info(available,aux.get_boatinfo())
+                        response = Message(to=str(msg.sender))
+                        response.body = jsonpickle.encode(a2)
+                        response.set_metadata("performative", "refuse")
+                        await self.send(response)
+
                     else:
 
-                        available = str(available) + " & " + id_c
-                        #print("Available")
-                        #print(available)
-                        a2 = Message_Info(available, aux.get_boatinfo())
+                        available = str(cais_available) + " & " + channel
 
-                    response = Message(to=str(msg.sender))
-                    response.body = jsonpickle.encode(a2)
-                    response.set_metadata("performative", "confirm")
-                    await self.send(response)
+                        a2 = Message_Info(available, aux.get_boatinfo())
+                        self.agent.add_boattocais2(aux.get_boatinfo(),cais_available)
+                        response = Message(to=str(msg.sender))
+                        response.body = jsonpickle.encode(a2)
+                        response.set_metadata("performative", "confirm")
+                        await self.send(response)
 
                 if aux.get_type() == "ADD2RANDCAIS":
 

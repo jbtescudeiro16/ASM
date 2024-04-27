@@ -36,8 +36,6 @@ class Boat(agent.Agent):
            self.set("destination","Leixṍes")
            self.set("origin",ports[random.randint(0,12)])
 
-          # permission2Park = Permission2Park()
-          #self.add_behaviour(permission2Park)
 
         receiver = Boat_Receiver()
         self.add_behaviour(receiver)

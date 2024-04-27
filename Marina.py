@@ -1,12 +1,15 @@
 import json
 import time
+
+import pyfiglet
+
 from Agents.Boat import *
 from  Agents.CaisManager import *
 from Agents.LightHouse import *
 from Agents.MarinePolice import *
 from colorama import init, Fore
 from Behaviours.chooserandcais import *
-
+from Behaviours import askParkPermission
 
 class Marine:
     def runMarine(self):
@@ -17,8 +20,13 @@ class Marine:
                 "Conf file is not well defined.",
                 "red")
         else:
-            text = ("MARINE")
+            print("\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Agentes e Sistemas Multiagente%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+            text = pyfiglet.figlet_format("Porto de Leixoes", font="big")
             print(text)
+
+            text = pyfiglet.figlet_format("Eduardo Rocha | João Escudeiro | Hugo Martins", font="small")
+            print(" Grupo 2- Eduardo Rocha | João Escudeiro | Hugo Martins")
+            print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
         pwd = conf["pass"]
         jid = conf["jid"]
@@ -62,10 +70,11 @@ class Marine:
                 boat = Boat(boat_jid, pwd)
                 boat.set("jid", boat_jid)
                 boat.set("lighthouse", lighthousejid)
-                #if i < 3:
-                #    boat.set("status", "permission2Park")
+                if i < 6:
+                    boat.set("status", "permission2Park")
+
                 #else:
-                boat.set("status", "permission2Leave")
+                #boat.set("status", "permission2Leave")
 
                 boats[f'boat{i}'] = boat
                 boat.start()
@@ -98,6 +107,13 @@ class Marine:
                             lighthouse.set("DescargasOccupied", aux + 1)
                     behav1=AddTOrandCais()
                     boat.add_behaviour(behav1)
+                elif boat.get("status") == "permission2Park":
+                    while boat.get("type") == None:
+                        time.sleep(1)
+                    print(boat)
+                    #print("vou adicionar o comportamento de pedir para estacionar")
+                    permission2Park = Permission2Park()
+                    boat.add_behaviour(permission2Park)
 
 
             print("####################################################################################")

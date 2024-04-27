@@ -31,12 +31,9 @@ class CaisManager(agent.Agent):
     def closest_available(self, type, boat, available_channels):
         cais_available = None
         channel = None
-        #print(type)
         for id_channel, xy in available_channels.items():
             for cais in self.get("cais"):
-                #print(cais)
                 if type=="Private" and cais.type=="Private" and cais.available == True :
-                    #print("entrei em private")
                     if cais_available == None:
                         cais_available = cais
                         channel = id_channel
@@ -46,7 +43,6 @@ class CaisManager(agent.Agent):
                         cais_available = cais
                         channel = id_channel
                 elif cais.type=="Commercial"and (type=="Passenger Transport" or type=="Cargo Transport") and cais.available == True:
-                        #print("Entrei em baixo")
                         if cais_available == None:
                             cais_available = cais
                             channel = id_channel
@@ -62,7 +58,8 @@ class CaisManager(agent.Agent):
     def parkboat(self, type, boat):
         for cais in self.get("cais"):
             if type == cais.type and cais.get_availability() == True:
-                cais.set_plane(boat)
+                cais.set_boat(boat)
+
                 return cais
 
 
@@ -83,6 +80,13 @@ class CaisManager(agent.Agent):
                     boat.set_cais(cais)
                     cais.set_boat(boat.get_id())
                     return cais
+    def add_boattocais2(self, boat,cais):
+        print("adicionei o barco ao cais")
+        for i in self.get("cais"):
+            if i.get_id()==cais.get_id():
+                boat.set_cais(cais)
+                cais.set_boat(boat.get_id())
+                return cais
 
     def clearcais(self, boat):
         for cais in self.get("cais"):

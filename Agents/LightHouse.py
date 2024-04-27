@@ -2,6 +2,8 @@ import json
 import random
 
 from spade import  agent
+
+from TPMarina.Behaviours.Listener_Park_Requests import Listener_Park_Requests
 from TPMarina.Class.Channel import *
 from TPMarina.Behaviours.Light_Receive_Park import *
 from TPMarina.Behaviours.Listener_Undock_Requests import *
@@ -41,6 +43,9 @@ class LightHouse(agent.Agent):
 
         beh2 = Listerer_Undock_Requests()
         self.add_behaviour(beh2)
+
+        beh3=Listener_Park_Requests()
+        self.add_behaviour(beh3)
 
     def getemptychannels(self):
         ret = []
