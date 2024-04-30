@@ -1,7 +1,7 @@
 import jsonpickle
 from spade.message import  *
 from spade.behaviour import *
-from TPMarina.Class.Message import *
+from TPMarina.Class.Msg import *
 
 
 class CaisReceive(CyclicBehaviour):
@@ -11,7 +11,7 @@ class CaisReceive(CyclicBehaviour):
         msg = await self.receive()
         if msg:
             if msg.get_metadata("performative") == ("request"):
-                print("Recebi pedido para estacionar no cais")
+                #print("Recebi pedido para estacionar no cais")
                 aux = jsonpickle.decode(msg.body)
                 if aux.get_type()=="FreePark?":
                     channels= aux.get_channels()
@@ -23,7 +23,7 @@ class CaisReceive(CyclicBehaviour):
 
 
                     if cais_available == None:
-
+                        print("Todos os cais estão cheios")
                         available = "NOFREECAIS"
                         a2=Message_Info(available,aux.get_boatinfo())
                         response = Message(to=str(msg.sender))

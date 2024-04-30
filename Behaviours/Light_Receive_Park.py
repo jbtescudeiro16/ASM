@@ -1,8 +1,9 @@
 import jsonpickle
-from spade.behaviour import CyclicBehaviour
+from spade.behaviour import *
 from termcolor import colored
 
 from TPMarina.Behaviours.Permission_Cais import *
+from TPMarina.Behaviours.empty_queue import *
 
 
 class ReceiveParking(CyclicBehaviour):
@@ -20,8 +21,17 @@ class ReceiveParking(CyclicBehaviour):
 
                 elif aux.get_type()=="MARINEINFO":
                     reply_msg = msg.make_reply()
-                    queue = ""
                     info_channels = ""
+                    queue=""
+
+                    if len(self.agent.get("Queue"))==0:
+                        queue+="Empty"
+                    else :
+                        for barcofila in self.agent.get("Queue"):
+
+                            info = str(
+                                barcofila[1].get_id()) + " ➡️ " + barcofila[0]
+                            queue += " "   + info + " $ "
 
                     for channel in self.agent.get("channels"):
                         if channel.get_boat() == None:
@@ -37,7 +47,6 @@ class ReceiveParking(CyclicBehaviour):
 
 
             elif msg.get_metadata("performative") == ("confirm"):
-                print("recebi confirm manager")
                 aux=jsonpickle.decode(msg.body)
                 tipomsg=aux.get_type()
 
@@ -53,7 +62,7 @@ class ReceiveParking(CyclicBehaviour):
                     cais = corpo[0].strip()
                     canal = corpo[1].strip()
 
-                    print("idcanal:"+canal)
+                    #print("idcanal:"+canal)
 
                     for i in self.agent.get("channels"):
                          if i.get_id()==canal:
@@ -64,13 +73,16 @@ class ReceiveParking(CyclicBehaviour):
                     else :
                         antes = self.agent.get("DescargasOccupied")
                         self.agent.set("DescargasOccupied", antes + 1)
+
+                    count = self.agent.get("QueueCount")
+                    self.agent.set("Queue",[i for i in self.agent.get("Queue") if i[1].get_id() != aux.get_boatinfo().get_id()])
+                    self.agent.set("QueueCount", count - 1)
                     res = Message(to=aux.get_boatinfo().get_jid())
                     res.body=jsonpickle.encode( Message_Info(f"PARKCONCEDED&{cais}&{canal}",aux.get_boatinfo()))
 
                     res.set_metadata("performative", "inform")
 
 
-                    print("enviei o inform de lhe conceder o parque")
                     await self.send(res)
 
             elif msg.get_metadata("performative") == ("inform"):
@@ -79,17 +91,24 @@ class ReceiveParking(CyclicBehaviour):
                 tipomsg = aux.get_type()
                 if tipomsg=="UNDOCKFINISHED":
                     print("Undock Confirmation received Farol: "+ aux.get_boatinfo().get_id())
-
                     self.agent.removeboat_channel(aux.get_boatinfo().get_id())
-
                     dep= self.get("Departures")
                     self.set("Departures", dep+1)
+                    if len(self.agent.get("Queue"))>0:
+                        behav5=EmptyQueue("UNDOCKCOMPLETED")
+                        self.agent.add_behaviour(behav5)
+
+
+
+
                 elif tipomsg=="PARKCOMPLETED":
                     print("ParkFinished Confirmation received Farol: "+ aux.get_boatinfo().get_id())
                     self.agent.removeboat_channel(aux.get_boatinfo().get_id())
-                    print("limpei o canal onde estava o barco"+aux.get_boatinfo().get_id() )
                     dep= self.get("Arrivals")
                     self.set("Arrivals", dep+1)
+                    if len(self.agent.get("Queue")) > 0:
+                        behav5 = EmptyQueue("PARKCOMPLETED")
+                        self.agent.add_behaviour(behav5)
 
             elif msg.get_metadata("performative") == ("refuse"):
 

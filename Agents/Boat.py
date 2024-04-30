@@ -23,6 +23,7 @@ class Boat(agent.Agent):
         self.set("brand", brands[random.randint(0, 9)])
         self.set("fuel", random.randint(0, 100))
         self.set("cais", None)
+        self.set("id", self.get("jid").split("@")[0])
         self.set("channel", None)
         self.set("type",types[random.choices([1, 2, 3], [2, 1, 1])[0]])
 

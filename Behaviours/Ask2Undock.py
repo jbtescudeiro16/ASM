@@ -3,7 +3,7 @@ from spade.behaviour import OneShotBehaviour
 from spade.message import  *
 
 from TPMarina.Class.BoatInfo import BoatInfo
-from TPMarina.Class.Message import *
+from TPMarina.Class.Msg import *
 class Ask2Undock(OneShotBehaviour):
     async def run(self):
         msg = Message(to=self.agent.get("lighthouse"))

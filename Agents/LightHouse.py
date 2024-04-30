@@ -4,7 +4,7 @@ import random
 from spade import  agent
 
 from TPMarina.Behaviours.Listener_Park_Requests import Listener_Park_Requests
-from TPMarina.Class.Channel import *
+from TPMarina.Class.Channel import channel
 from TPMarina.Behaviours.Light_Receive_Park import *
 from TPMarina.Behaviours.Listener_Undock_Requests import *
 class LightHouse(agent.Agent):
@@ -13,7 +13,7 @@ class LightHouse(agent.Agent):
         print("LightHouse Starting")
         f = open("settings.json")
         conf = json.load(f)
-
+        self.set("QueueCount",0)
         self.set("Queue", [])
         self.set("maxboats2park", conf["maxboats2park"])
         self.set("Arrivals", 0)
@@ -29,8 +29,8 @@ class LightHouse(agent.Agent):
         for index in range(conf["channels"]):
             x = "%.2f" % random.randint(0, 1000)
             y = "%.2f" % random.randint(0, 1000)
-            channel = Channel(x, y, index)
-            channels_array.append(channel)
+            canal = channel(x, y, index)
+            channels_array.append(canal)
 
         self.set("channels", channels_array)
         self.set("DescargasOccupied", 0)
@@ -77,5 +77,5 @@ class LightHouse(agent.Agent):
                 channel_chosen.set_available(False)
 
 
-            print("O canal escolhido foi:"+ str(channel_chosen))
+
             return channel_chosen

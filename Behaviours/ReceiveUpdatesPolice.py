@@ -13,8 +13,8 @@ class PoliceReceive(CyclicBehaviour):
         if msg:
             msg.get_metadata('performative')=="inform"
 
-            color = "yellow"
-            print(colored("*" * 188, color))
+            print("\033[34m" + "*" * 188 + "\033[0m")
+
 
             body = msg.body.split(" \n ")
             for b in body:
@@ -22,7 +22,7 @@ class PoliceReceive(CyclicBehaviour):
 
                 if b[0] == "Boats In Operation":
                     new_b = b[1].split(" $ ")
-                    print(colored(b[0] + ": \n", color, attrs=["bold"]))
+                    print("\033[1;34m" + b[0] + ": \n" + "\033[0m")
                     if b[1]:
                         for item in new_b:
                             print(item)
@@ -30,15 +30,17 @@ class PoliceReceive(CyclicBehaviour):
                         print("    Empty\n")
                 elif b[0] == "Marine Queue":
                     new_b = b[1].split(" $ ")
-                    print(colored(b[0] + ": \n", color, attrs=["bold"]))
+                    print("\033[1;34m" + ": \n"+"\033[0m")
                     if b[1]:
                         for item in new_b:
                             print(item)
                     else:
                         print("    Empty\n")
                 else:
-                    print(colored(b[0] + ": ", color, attrs=["bold"]) + " " + b[1] + "\n")
+                    print("\033[1;34m" + b[0] + ": " + "\033[0m" + b[1] + "\n")
+
+
 
             # print(msg.body)
-            print(colored("*" * 188, color))
+            print("\033[34m" + "*" * 188 + "\033[0m")
             self.counter += 1

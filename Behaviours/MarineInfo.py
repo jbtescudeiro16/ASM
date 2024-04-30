@@ -1,6 +1,6 @@
 import jsonpickle
 from spade.behaviour import *
-from TPMarina.Class.Message import *
+from TPMarina.Class.Msg import *
 import datetime
 
 class Marine_Info(PeriodicBehaviour):

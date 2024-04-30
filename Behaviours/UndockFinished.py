@@ -1,7 +1,7 @@
 import jsonpickle
 from spade.behaviour import TimeoutBehaviour
 from spade.message import *
-from TPMarina.Class.Message import *
+from TPMarina.Class.Msg import *
 from TPMarina.Class.BoatInfo import *
 
 

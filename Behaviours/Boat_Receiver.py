@@ -49,4 +49,11 @@ class Boat_Receiver(CyclicBehaviour):
                     confirmation = UndockFinished(start_at=start_At)
                     self.agent.add_behaviour(confirmation)
 
+            elif msg.get_metadata("performative") == ("refuse"):
+                aux=jsonpickle.decode(msg.body)
+                info=aux.get_type()
+                if info=="ADDED2QUEUE":
+                    print("\033[33mSou o barco " + self.agent.get("id") + " e fui adicionado a uma fila\033[0m")
+
+
 

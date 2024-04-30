@@ -3,7 +3,7 @@
   "pass": "NOPASSWORD",
   "arriving": 10,
   "leaving": 5,
-  "channels": 3,
+  "channels": 1,
   "cais": 10,
   "descargas": 2,
   "maxboats2park": 16

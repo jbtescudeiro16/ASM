@@ -71,7 +71,8 @@ class Marine:
                 boat.set("jid", boat_jid)
                 boat.set("lighthouse", lighthousejid)
                 if i < 6:
-                    boat.set("status", "permission2Park")
+                    #boat.set("status", "permission2Park")
+                    boat.set("status", "permission2Leave")
 
                 #else:
                 #boat.set("status", "permission2Leave")
@@ -111,13 +112,13 @@ class Marine:
                     while boat.get("type") == None:
                         time.sleep(1)
                     print(boat)
-                    #print("vou adicionar o comportamento de pedir para estacionar")
                     permission2Park = Permission2Park()
                     boat.add_behaviour(permission2Park)
 
 
             print("####################################################################################")
-
+            while lighthouse.is_alive():
+                time.sleep(2)
         except KeyboardInterrupt:
             for id, p in boats.items():
                 print(id)

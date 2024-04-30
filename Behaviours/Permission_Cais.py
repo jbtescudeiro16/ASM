@@ -1,7 +1,7 @@
 import jsonpickle
 from spade.behaviour import OneShotBehaviour
 from spade.message import *
-from TPMarina.Class.Message import *
+from TPMarina.Class.Msg import *
 
 class Permission_Cais(OneShotBehaviour):
 

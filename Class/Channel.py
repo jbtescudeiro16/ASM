@@ -1,4 +1,4 @@
-class Channel:
+class channel:
     def __init__(self, x, y, id):
         self.id = f"Channel {id}"
         self.x = x

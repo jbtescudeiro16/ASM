@@ -1,7 +1,7 @@
 import jsonpickle
 from spade.behaviour import OneShotBehaviour
 from spade.message import *
-from TPMarina.Class.Message import *
+from TPMarina.Class.Msg import *
 from TPMarina.Class.BoatInfo import *
 class AddTOrandCais(OneShotBehaviour):
     async def run(self):
