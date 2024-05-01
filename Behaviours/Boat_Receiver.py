@@ -31,7 +31,6 @@ class Boat_Receiver(CyclicBehaviour):
                     print("\033[92mDefini o meu cais estacionado no barco:" + str(self.agent.jid) + "\033[0m")
 
                     start_At = datetime.datetime.now() + datetime.timedelta(seconds=10)
-                    print("foi me concedido parque e vou adicionar o comportamento")
                     confirmation = ParkFinished(start_at=start_At)
                     self.agent.add_behaviour(confirmation)
 

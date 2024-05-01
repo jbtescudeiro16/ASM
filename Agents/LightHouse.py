@@ -7,6 +7,7 @@ from TPMarina.Behaviours.Listener_Park_Requests import Listener_Park_Requests
 from TPMarina.Class.Channel import channel
 from TPMarina.Behaviours.Light_Receive_Park import *
 from TPMarina.Behaviours.Listener_Undock_Requests import *
+from TPMarina.Behaviours.WeatherForecast import *
 class LightHouse(agent.Agent):
 
     async def setup(self):
@@ -16,6 +17,7 @@ class LightHouse(agent.Agent):
         self.set("QueueCount",0)
         self.set("Queue", [])
         self.set("maxboats2park", conf["maxboats2park"])
+        self.set("Weather", conf["weather"])
         self.set("Arrivals", 0)
         self.set("Departures", 0)
         self.set("Canceled Arrivals", 0)
@@ -47,16 +49,19 @@ class LightHouse(agent.Agent):
         beh3=Listener_Park_Requests()
         self.add_behaviour(beh3)
 
+        beh4 = WeatherForecast(period=10)
+        self.add_behaviour(beh4)
+
     def getemptychannels(self):
         ret = []
         for channel in self.get("channels"):
-            if channel.get_available() == True:
+            if channel.get_available() == True and channel.get_state_channel()=="Open":
                 ret.append((channel.get_id(),channel.get_coords()))
         return ret
 
     def removeboat_channel(self,id):
         for channel in self.get("channels"):
-            if channel.get_available()==False:
+            if channel.get_available()==False and channel.get_boat()!=None:
                 if (channel.get_boat().get_id()== id):
                     channel.remove_boat()
                     channel.set_available(True)
