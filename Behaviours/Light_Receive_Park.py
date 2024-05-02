@@ -77,9 +77,8 @@ class ReceiveParking(CyclicBehaviour):
                         antes = self.agent.get("DescargasOccupied")
                         self.agent.set("DescargasOccupied", antes + 1)
 
-                    count = self.agent.get("QueueCount")
                     self.agent.set("Queue",[i for i in self.agent.get("Queue") if i[1].get_id() != aux.get_boatinfo().get_id()])
-                    self.agent.set("QueueCount", count - 1)
+
                     res = Message(to=aux.get_boatinfo().get_jid())
                     res.body=jsonpickle.encode( Message_Info(f"PARKCONCEDED&{cais}&{canal}",aux.get_boatinfo()))
 
@@ -119,6 +118,23 @@ class ReceiveParking(CyclicBehaviour):
                 tipomsg = aux.get_type()
                 if tipomsg=="NOFREECAIS":
                     print("falta tratar o no free cais no light receive park")
+
+            elif msg.get_metadata("performative") == ("accept_proposal"):
+                print("recebi aceitar queue no farol")
+                aux = jsonpickle.decode(msg.body)
+                tipomsg = aux.get_type()
+                partida=tipomsg.split("&")
+                if partida[0]=="ACCEPTQUEUE":
+                    print("ADICIONEI À QUEUE com o id de queue"+ partida[1])
+                    queue = self.agent.get("Queue")
+                    if not any(item[1].get_id() == aux.get_boatinfo().get_id() for item in queue):
+                        queue.append(("WAITING2PARK", aux.get_boatinfo(), int(partida[1])))
+                        self.agent.set("Queue", queue)
+
+            elif msg.get_metadata("performative") == ("reject_proposal"):
+                print("recebi reject queue no farol")
+                canceled= self.agent.get("Canceled")
+                self.agent.get("Canceled",canceled+1)
 
 
 

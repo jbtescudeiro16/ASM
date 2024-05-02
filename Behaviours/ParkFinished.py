@@ -3,6 +3,7 @@ from spade.behaviour import TimeoutBehaviour
 from spade.message import Message
 from TPMarina.Class.Msg import *
 from TPMarina.Class.BoatInfo import *
+from TPMarina.Behaviours.TimeoutToUndock import *
 
 import datetime
 
@@ -16,4 +17,12 @@ class ParkFinished(TimeoutBehaviour):
         #print("Ja estacionei e vou abandonar o canal"+ self.agent.get("jid"))
         await self.send(msg)
 
+        origin = self.agent.get("Origin")
+        destination = self.agent.get("Destination")
+        self.agent.set("Origin", destination)
+        self.agent.set("Destination", origin)
+        self.agent.set("Fuel", 100)
 
+        start_At = datetime.datetime.now() + datetime.timedelta(seconds=15)
+        beh1 = TimeoutToUndock(start_at=start_At)
+        self.agent.add_behaviour(beh1)

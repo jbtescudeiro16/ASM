@@ -3,6 +3,7 @@ from spade.message import *
 
 from TPMarina.Behaviours.ConfirmUndock import ConfirmUndock
 from TPMarina.Behaviours.Permission_Cais import Permission_Cais
+from TPMarina.Behaviours.Refuse import Refuse
 from TPMarina.Class import *
 from termcolor import colored
 
@@ -29,8 +30,9 @@ class EmptyQueue(OneShotBehaviour):
         queue=self.agent.get("Queue")
         if len(queue)>0:
             old=self.getoldest(queue)
-            print("old"+ str(old))
             type= old[0]
+            print("+antigo"+str(old))
+            print("Type: "+ type)
             if type=="WAITING2PARK":
                 boat=old[1]
                 empty_channels = self.agent.getemptychannels()
@@ -39,10 +41,28 @@ class EmptyQueue(OneShotBehaviour):
                         if self.agent.get("CaisOccupied") < self.agent.get("CaisTotal"):
                             permission = Permission_Cais(boat, empty_channels)
                             self.agent.add_behaviour(permission)
+                        else :
+                            print("Não ha mais cais privados livres")
+                            self.agent.set("Queue",
+                                           [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
+                            behav3 = Refuse(boat, "NOPARKS")
+                            self.agent.add_behaviour(behav3)
+                            can = self.agent.get("Canceled")
+                            self.agent.set("Canceled", can+1)
+
                     else:
                         if self.agent.get("DescargasOccupied") < self.agent.get("DescargasTotal"):
                             permission = Permission_Cais(boat, empty_channels)
                             self.agent.add_behaviour(permission)
+                        else:
+                            print("Não há mais descargas livres")
+                            self.agent.set("Queue",
+                                           [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
+                            behav3 = Refuse(boat, "NOPARKS")
+                            self.agent.add_behaviour(behav3)
+                            can= self.agent.get("Canceled")
+                            self.agent.set("Canceled",can+1)
+
                 else:
                     print("nao fiz nada pq não há canais livres")
             elif type=="WAITING2UNDOCK":
@@ -53,7 +73,6 @@ class EmptyQueue(OneShotBehaviour):
                     count = self.agent.get("QueueCount")
                     self.agent.set("Queue",
                                    [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
-                    self.agent.set("QueueCount", count - 1)
                     if boat.get_type() == "Private":
                         cais_occupation = self.agent.get(f"CaisOccupied")
                         if cais_occupation > 0:

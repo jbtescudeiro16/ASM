@@ -3,6 +3,9 @@ from spade.behaviour import *
 
 from TPMarina.Behaviours.Permission_Cais import Permission_Cais
 from TPMarina.Behaviours.infofullchannels import *
+from TPMarina.Behaviours.ProposeQueue import *
+from TPMarina.Behaviours.Refuse import *
+
 
 
 class Listener_Park_Requests(CyclicBehaviour):
@@ -50,16 +53,24 @@ class Listener_Park_Requests(CyclicBehaviour):
                                     self.agent.add_behaviour(behav3)
 
                     elif len(empty_channels)==0:
-                        print("Não ha canais vazios no listener de parque")
+                        print("Não ha canais vazios no listener de parque, vou mandar pedido para perguntar se ele quer ir para a queue")
+
                         queue = self.agent.get("Queue")
                         count = self.agent.get("QueueCount")
 
-                        if not any(item[1].get_id() == aux.get_boatinfo().get_id() for item in queue):
-                            queue.append(("WAITING2PARK", aux.get_boatinfo(), count))
-                            self.agent.set("QueueCount", count + 1)
-                            self.agent.set("Queue", queue)
-                            behav3 = FullChannels(aux.get_boatinfo())
-                            self.agent.add_behaviour(behav3)
+                        if not any(item[1].get_id() == aux.get_boatinfo().get_id() for item in queue)  :
+                            if len(queue) +1<= self.agent.get("maxboats2park"):
+                                behav3 = ProposeQueue(aux.get_boatinfo(),len(queue),count,self.agent.get("maxboats2park"))
+                                self.agent.set("QueueCount", count + 1)
+
+                                self.agent.add_behaviour(behav3)
+                            else:
+                                print("Queue Cheia")
+                                can=self.agent.get("Canceled")
+                                self.agent.get("Canceled",can+1)
+                                behav3 = Refuse(aux.get_boatinfo(),"FULLQUEUE")
+                                self.agent.add_behaviour(behav3)
+
 
 
 

@@ -27,7 +27,7 @@ class Listerer_Undock_Requests(CyclicBehaviour):
                         print("queue antes: " + str(self.agent.get("Queue")))
                         self.agent.set("Queue", [i for i in self.agent.get("Queue") if
                                                  i[1].get_id() != aux.get_boatinfo().get_id()])
-                        self.agent.set("QueueCount", count - 1)
+
                         print("queue depois: " + str(self.agent.get("Queue")))
 
                         if aux.get_boatinfo().get_type()=="Private":

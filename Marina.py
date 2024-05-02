@@ -125,6 +125,7 @@ class Marine:
                 p.stop()
             caismanager.stop()
             lighthouse.stop()
+            lighthouse.results()
             print("Agents finished")
 
 if __name__ == "__main__":

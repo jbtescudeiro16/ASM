@@ -3,9 +3,9 @@
   "pass": "NOPASSWORD",
   "arriving": 10,
   "leaving": 5,
-  "channels": 3,
-  "cais": 10,
+  "channels": 2,
+  "cais": 3,
   "descargas": 2,
-  "maxboats2park": 16,
-  "weather": "Sun"
+  "maxboats2park": 2,
+  "weather": "Sunny"
 }

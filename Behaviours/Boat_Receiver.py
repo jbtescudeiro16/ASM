@@ -51,8 +51,35 @@ class Boat_Receiver(CyclicBehaviour):
             elif msg.get_metadata("performative") == ("refuse"):
                 aux=jsonpickle.decode(msg.body)
                 info=aux.get_type()
-                if info=="ADDED2QUEUE":
-                    print("\033[33mSou o barco " + self.agent.get("id") + " e fui adicionado a uma fila\033[0m")
+                if info=="FULLQUEUE":
+                    print("Queue cheia. a terminar agente")
+                if info=="NOPARKS":
+                    print("Não há parques livres ")
+
+            elif msg.get_metadata("performative") == ("propose"):
+                aux=jsonpickle.decode(msg.body)
+                info=aux.get_type()
+                partido=info.split("&")
+                if partido[0]=="ADD2QUEUE?":
+
+                    if int(partido[1]) +1 <= int(partido[3]):
+                        print("ACcEPT QUEUE " + self.agent.get("id"))
+                        response = Message(to= self.agent.get("lighthouse"))
+                        response.set_metadata("performative", "accept_proposal")
+                        response.body = jsonpickle.encode(
+                        Message_Info(f"ACCEPTQUEUE&{partido[2]}", BoatInfo(self.agent.get("jid"),self.agent.get("type"),self.agent.get("brand"),self.agent.get("origin"),self.agent.get("destination"),self.agent.get("fuel"),self.agent.get("status"),self.agent.get("cais"),self.agent.get("channel"))))
+                        await self.send(response)
+
+
+
+                    else:
+                        response = Message(to=self.agent.get("lighthouse"))
+                        response.set_metadata("performative", "reject_proposal")
+                        response.body = jsonpickle.encode(
+                            Message_Info(f"REJECTQUEUE&{partido[2]}", BoatInfo(self.agent.get("jid"),self.agent.get("type"),self.agent.get("brand"),self.agent.get("origin"),self.agent.get("destination"),self.agent.get("fuel"),self.agent.get("status"),self.agent.get("cais"),self.agent.get("channel"))))
+                        print("mandei para REJEITAR ")
+                        await self.send(response)
+
 
 
 

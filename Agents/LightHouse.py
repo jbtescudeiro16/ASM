@@ -20,7 +20,7 @@ class LightHouse(agent.Agent):
         self.set("Weather", conf["weather"])
         self.set("Arrivals", 0)
         self.set("Departures", 0)
-        self.set("Canceled Arrivals", 0)
+        self.set("Canceled", 0)
         self.set("CaisTotal", conf["cais"])
         self.set("DescargasTotal", conf["descargas"])
         self.set("occupiedchannels", [])
@@ -81,6 +81,12 @@ class LightHouse(agent.Agent):
                 channel_chosen.set_boat(boat, "UNDOCKING")
                 channel_chosen.set_available(False)
 
-
-
             return channel_chosen
+    def results(self):
+        with open("results.json", "w") as outfile:
+            dictionary = {}
+            dictionary["Parks"] = self.get("Arrivals")
+            dictionary["Undocks"] = self.get("Departures")
+            dictionary["Canceled"] = self.get("Canceled")
+            json.dump(dictionary, outfile)
+            outfile.flush()
