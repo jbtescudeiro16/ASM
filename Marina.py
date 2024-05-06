@@ -32,7 +32,9 @@ class Marine:
         jid = conf["jid"]
         boats = {}
 
-        nr_boats = 10
+        arriving=conf["arriving"]
+        parting=conf["leaving"]
+        nr_boats = int(arriving)+parting
 
         try:
 
@@ -70,12 +72,11 @@ class Marine:
                 boat = Boat(boat_jid, pwd)
                 boat.set("jid", boat_jid)
                 boat.set("lighthouse", lighthousejid)
-                if i < 6:
-                    boat.set("status", "permission2Park")
-                    #boat.set("status", "permission2Leave")
+                if i < 10:
+                   boat.set("status", "permission2Leave")
+                #else :
+                #    boat.set("status", "permission2Park")
 
-                #else:
-                #boat.set("status", "permission2Leave")
 
                 boats[f'boat{i}'] = boat
                 boat.start()
@@ -91,21 +92,11 @@ class Marine:
                                 lista = ["Passenger Transport", "Cargo Transport"]
                                 random_element = random.choice(lista)
                                 boat.set("type",random_element)
-                                aux=lighthouse.get("DescargasOccupied")
-                                lighthouse.set("DescargasOccupied",aux+1)
-                                print(lighthouse.get("DescargasOccupied"))
-                            else :
-                                aux= lighthouse.get("CaisOccupied")
-                                lighthouse.set("CaisOccupied",aux+1)
+
                     elif boat.get("type")=="Passenger Transport" or  boat.get("type")=="Cargo Transport" :
                         if lighthouse.get("DescargasOccupied")== lighthouse.get("DescargasTotal"):
                             boat.set("type","Private")
-                            aux = lighthouse.get("CaisOccupied")
-                            lighthouse.set("CaisOccupied", aux + 1)
 
-                        else:
-                            aux = lighthouse.get("DescargasOccupied")
-                            lighthouse.set("DescargasOccupied", aux + 1)
                     behav1=AddTOrandCais()
                     boat.add_behaviour(behav1)
                 elif boat.get("status") == "permission2Park":

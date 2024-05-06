@@ -23,7 +23,6 @@ class CaisReceive(CyclicBehaviour):
 
 
                     if cais_available == None:
-                        print("Todos os cais estão cheios")
                         available = "NOFREECAIS"
                         a2=Message_Info(available,aux.get_boatinfo())
                         response = Message(to=str(msg.sender))

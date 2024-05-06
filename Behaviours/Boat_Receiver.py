@@ -16,7 +16,6 @@ class Boat_Receiver(CyclicBehaviour):
 
                 info=aux.get_type().split("&")
                 if info[0]== "Cais":
-                    print("Cais")
 
                     self.agent.set("cais",info[1])
                     print("\033[92mDefini o meu cais Inicial no barco:" + str(self.agent.jid) + "\n Cais :"+ self.agent.get("cais")+"\033[0m")
@@ -41,7 +40,6 @@ class Boat_Receiver(CyclicBehaviour):
                 aux=jsonpickle.decode(msg.body)
                 info=aux.get_type()
                 if info=="UNDOCKCONCEDED":
-                    print(aux.get_boatinfo().get_id()+"-> Undocking")
                     self.agent.set("cais", None)
                     start_At = datetime.datetime.now() + datetime.timedelta(seconds=10)
 
@@ -63,7 +61,7 @@ class Boat_Receiver(CyclicBehaviour):
                 if partido[0]=="ADD2QUEUE?":
 
                     if int(partido[1]) +1 <= int(partido[3]):
-                        print("ACcEPT QUEUE " + self.agent.get("id"))
+                        print("ACCEPT QUEUE " + self.agent.get("id"))
                         response = Message(to= self.agent.get("lighthouse"))
                         response.set_metadata("performative", "accept_proposal")
                         response.body = jsonpickle.encode(
@@ -77,7 +75,6 @@ class Boat_Receiver(CyclicBehaviour):
                         response.set_metadata("performative", "reject_proposal")
                         response.body = jsonpickle.encode(
                             Message_Info(f"REJECTQUEUE&{partido[2]}", BoatInfo(self.agent.get("jid"),self.agent.get("type"),self.agent.get("brand"),self.agent.get("origin"),self.agent.get("destination"),self.agent.get("fuel"),self.agent.get("status"),self.agent.get("cais"),self.agent.get("channel"))))
-                        print("mandei para REJEITAR ")
                         await self.send(response)
 
 

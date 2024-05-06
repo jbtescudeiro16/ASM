@@ -61,6 +61,18 @@ class ReceiveParking(CyclicBehaviour):
                     answer.body=jsonpickle.encode(Message_Info(f"Cais& {cais}",aux.get_boatinfo()))
                     await self.send(answer)
 
+                    barco=aux.get_boatinfo()
+                    if barco.get_type()=="Private":
+                        cont=self.agent.get("CaisOccupied")
+                        print(f"aumentei privado inicial antes :{cont}, depois {cont+1}")
+                        self.agent.set("CaisOccupied",cont+1)
+                    else :
+                        cont = self.agent.get("DescargasOccupied")
+                        print(f"aumentei comercial inicial antes :{cont}, depois {cont + 1}")
+                        self.agent.set("DescargasOccupied", cont + 1)
+
+
+
                 else :
                     cais = corpo[0].strip()
                     canal = corpo[1].strip()
@@ -72,9 +84,11 @@ class ReceiveParking(CyclicBehaviour):
                             i.set_boat(aux.get_boatinfo(),"BOAT COMING TO PARK")
                     if aux.get_boatinfo().get_type()=="Private":
                         antes=self.agent.get("CaisOccupied")
+                        print(f"aumentei normal light receive privado inicial antes :{antes}, depois {antes + 1}")
                         self.agent.set("CaisOccupied",antes+1)
                     else :
                         antes = self.agent.get("DescargasOccupied")
+                        print(f"aumentei normal light receive descargas inicial antes :{antes}, depois {antes + 1}")
                         self.agent.set("DescargasOccupied", antes + 1)
 
                     self.agent.set("Queue",[i for i in self.agent.get("Queue") if i[1].get_id() != aux.get_boatinfo().get_id()])
@@ -96,6 +110,9 @@ class ReceiveParking(CyclicBehaviour):
                     self.agent.removeboat_channel(aux.get_boatinfo().get_id())
                     dep= self.get("Departures")
                     self.set("Departures", dep+1)
+
+
+
                     if len(self.agent.get("Queue"))>0:
                         behav5=EmptyQueue("UNDOCKCOMPLETED")
                         self.agent.add_behaviour(behav5)
@@ -120,19 +137,18 @@ class ReceiveParking(CyclicBehaviour):
                     print("falta tratar o no free cais no light receive park")
 
             elif msg.get_metadata("performative") == ("accept_proposal"):
-                print("recebi aceitar queue no farol")
                 aux = jsonpickle.decode(msg.body)
                 tipomsg = aux.get_type()
                 partida=tipomsg.split("&")
                 if partida[0]=="ACCEPTQUEUE":
-                    print("ADICIONEI À QUEUE com o id de queue"+ partida[1])
+
                     queue = self.agent.get("Queue")
                     if not any(item[1].get_id() == aux.get_boatinfo().get_id() for item in queue):
                         queue.append(("WAITING2PARK", aux.get_boatinfo(), int(partida[1])))
                         self.agent.set("Queue", queue)
 
             elif msg.get_metadata("performative") == ("reject_proposal"):
-                print("recebi reject queue no farol")
+
                 canceled= self.agent.get("Canceled")
                 self.agent.get("Canceled",canceled+1)
 

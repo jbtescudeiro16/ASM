@@ -29,7 +29,6 @@ class Boat(agent.Agent):
 
         if self.get("status") == "permission2Leave":
             self.set("destination", ports[random.randint(0,12)])
-
             self.set("origin", "Leixões")
 
 

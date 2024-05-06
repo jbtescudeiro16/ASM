@@ -26,13 +26,11 @@ class EmptyQueue(OneShotBehaviour):
 
 
     async def run(self):
-        print("Behaviour de tratar a queue")
         queue=self.agent.get("Queue")
         if len(queue)>0:
             old=self.getoldest(queue)
             type= old[0]
-            print("+antigo"+str(old))
-            print("Type: "+ type)
+
             if type=="WAITING2PARK":
                 boat=old[1]
                 empty_channels = self.agent.getemptychannels()
@@ -42,7 +40,6 @@ class EmptyQueue(OneShotBehaviour):
                             permission = Permission_Cais(boat, empty_channels)
                             self.agent.add_behaviour(permission)
                         else :
-                            print("Não ha mais cais privados livres")
                             self.agent.set("Queue",
                                            [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
                             behav3 = Refuse(boat, "NOPARKS")
@@ -55,7 +52,7 @@ class EmptyQueue(OneShotBehaviour):
                             permission = Permission_Cais(boat, empty_channels)
                             self.agent.add_behaviour(permission)
                         else:
-                            print("Não há mais descargas livres")
+
                             self.agent.set("Queue",
                                            [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
                             behav3 = Refuse(boat, "NOPARKS")
@@ -63,8 +60,7 @@ class EmptyQueue(OneShotBehaviour):
                             can= self.agent.get("Canceled")
                             self.agent.set("Canceled",can+1)
 
-                else:
-                    print("nao fiz nada pq não há canais livres")
+
             elif type=="WAITING2UNDOCK":
                 boat=old[1]
                 empty_channels = self.agent.getemptychannels()
@@ -76,19 +72,16 @@ class EmptyQueue(OneShotBehaviour):
                     if boat.get_type() == "Private":
                         cais_occupation = self.agent.get(f"CaisOccupied")
                         if cais_occupation > 0:
+                            print("reduzi no emptyqueue cais")
                             self.agent.set(f"CaisOccupied", cais_occupation - 1)
                     else:
                         cais_occupation = self.agent.get(f"DescargasOccupied")
                         if cais_occupation > 0:
+                            print("reduzi no emptyqueue descargas")
                             self.agent.set(f"DescargasOccupied", cais_occupation - 1)
 
                     behav1 = ConfirmUndock(boat)
                     self.agent.add_behaviour(behav1)
-                else:
-                    print("nao fiz nada pq não há canais livres")
-
-
-
 
         else:
             print("Queue Vazia, Ignorar")

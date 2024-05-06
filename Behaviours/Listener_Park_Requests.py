@@ -21,7 +21,7 @@ class Listener_Park_Requests(CyclicBehaviour):
                     canais= self.agent.get("channels")
 
                     empty_channels = self.agent.getemptychannels()
-                    print("Neste momento estão vazios : "+ str(empty_channels))
+                    #print("Neste momento estão vazios : "+ str(empty_channels))
                     if len(empty_channels) > 0:
                         if boat.get_type() == "Private":
                             if self.agent.get("CaisOccupied") < self.agent.get("CaisTotal"):
@@ -53,7 +53,7 @@ class Listener_Park_Requests(CyclicBehaviour):
                                     self.agent.add_behaviour(behav3)
 
                     elif len(empty_channels)==0:
-                        print("Não ha canais vazios no listener de parque, vou mandar pedido para perguntar se ele quer ir para a queue")
+                        #print("Não ha canais vazios no listener de parque, vou mandar pedido para perguntar se ele quer ir para a queue")
 
                         queue = self.agent.get("Queue")
                         count = self.agent.get("QueueCount")
@@ -65,9 +65,9 @@ class Listener_Park_Requests(CyclicBehaviour):
 
                                 self.agent.add_behaviour(behav3)
                             else:
-                                print("Queue Cheia")
+                                #print("Queue Cheia")
                                 can=self.agent.get("Canceled")
-                                self.agent.get("Canceled",can+1)
+                                self.agent.set("Canceled",can+1)
                                 behav3 = Refuse(aux.get_boatinfo(),"FULLQUEUE")
                                 self.agent.add_behaviour(behav3)
 
