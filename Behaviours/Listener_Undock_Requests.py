@@ -14,14 +14,11 @@ class Listerer_Undock_Requests(CyclicBehaviour):
                 partida=aux.get_type().split("&")
                 info=partida[0]
                 if info=="ASK2UNDOCK":
-                    print("recebi pedido undock")
                     cais = aux.get_boatinfo().get_cais()
 
                     #print(cais)
                     pistas=self.agent.getemptychannels()
-                    print("Pistas vazias" + str(pistas))
                     if len(pistas) >0:
-                        print("pistas livres e recebi undock request")
                         pistaescolhida=self.agent.choose_channel_undock(aux.get_boatinfo())
                         count = self.agent.get("QueueCount")
                         #print("queue antes: " + str(self.agent.get("Queue")))
@@ -32,13 +29,11 @@ class Listerer_Undock_Requests(CyclicBehaviour):
                         if aux.get_boatinfo().get_type()=="Private":
                             cais_occupation = self.agent.get(f"CaisOccupied")
                             if cais_occupation > 0:
-                                print(f"reduzi nos privado no listener undockss antes: {cais_occupation},depois {cais_occupation-1}")
                                 self.agent.set(f"CaisOccupied", cais_occupation - 1)
                         else :
                             cais_occupation = self.agent.get(f"DescargasOccupied")
                             if cais_occupation > 0:
-                                print(
-                                    f"reduzi nos privado no listener undockss antes: {cais_occupation},depois {cais_occupation - 1}")
+
                                 self.agent.set(f"DescargasOccupied", cais_occupation - 1)
 
                         behav1 = ConfirmUndock(aux.get_boatinfo())

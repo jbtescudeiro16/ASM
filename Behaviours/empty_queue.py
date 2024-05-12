@@ -26,7 +26,7 @@ class EmptyQueue(OneShotBehaviour):
 
 
     async def run(self):
-        print("Tratar a queue")
+        print("Bheviour treat queue")
         queue=self.agent.get("Queue")
         if len(queue)>0:
 
@@ -34,17 +34,15 @@ class EmptyQueue(OneShotBehaviour):
             type= old[0]
 
             if type=="WAITING2PARK":
-                print("o tipo de quem vou tratar é waiting 2 park")
+
                 boat=old[1]
                 empty_channels = self.agent.getemptychannels()
                 if len(empty_channels) > 0:
                     if boat.get_type() == "Private":
                         if self.agent.get("CaisOccupied") < self.agent.get("CaisTotal"):
-                            print("aceitei privado")
                             permission = Permission_Cais(boat, empty_channels)
                             self.agent.add_behaviour(permission)
                         else :
-                            print("recusei pq n ha parques privados")
                             self.agent.set("Queue",
                                            [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
                             behav3 = Refuse(boat, "NOPARKS")
@@ -77,19 +75,18 @@ class EmptyQueue(OneShotBehaviour):
                     if boat.get_type() == "Private":
                         cais_occupation = self.agent.get(f"CaisOccupied")
                         if cais_occupation > 0:
-                            print("reduzi no emptyqueue cais")
+
                             self.agent.set(f"CaisOccupied", cais_occupation - 1)
                     else:
                         cais_occupation = self.agent.get(f"DescargasOccupied")
                         if cais_occupation > 0:
-                            print("reduzi no emptyqueue descargas")
                             self.agent.set(f"DescargasOccupied", cais_occupation - 1)
 
                     behav1 = ConfirmUndock(boat)
                     self.agent.add_behaviour(behav1)
 
         else:
-            print("Queue Vazia, Ignorar")
+            print("EMPTY QUEUE, IGNORING")
 
 
 

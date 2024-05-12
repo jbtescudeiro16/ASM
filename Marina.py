@@ -72,9 +72,9 @@ class Marine:
                 boat = Boat(boat_jid, pwd)
                 boat.set("jid", boat_jid)
                 boat.set("lighthouse", lighthousejid)
-                if i < 10:
-                #   boat.set("status", "permission2Leave")
-                #else :
+                if i < parting:
+                   boat.set("status", "permission2Leave")
+                else :
                    boat.set("status", "permission2Park")
 
 

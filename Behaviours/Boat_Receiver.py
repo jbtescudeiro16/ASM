@@ -19,7 +19,7 @@ class Boat_Receiver(CyclicBehaviour):
                 if info[0]== "Cais":
                     self.agent.set("flag", False)
                     self.agent.set("cais",info[1])
-                    print("\033[92mDefini o meu cais Inicial no barco:" + str(self.agent.jid) + "\n Cais :"+ self.agent.get("cais")+"\033[0m")
+                    print("\033[92mDefini o meu cais Inicial no: " + str(self.agent.get("id")) + "\n Cais :"+ self.agent.get("cais")+"\033[0m")
 
 
                     behav1=Ask2Undock()
@@ -28,7 +28,7 @@ class Boat_Receiver(CyclicBehaviour):
                     cais=info[1]
                     channel=info[2]
                     self.agent.set("cais", cais)
-                    print("\033[92mDefini o meu cais estacionado no barco:" + str(self.agent.jid) + "\033[0m")
+                    print("\033[92m Estacionado :" + str(self.agent.get("id")) + "\033[0m")
                     self.agent.set("inqueue", False)
                     start_At = datetime.datetime.now() + datetime.timedelta(seconds=10)
                     confirmation = ParkFinished(start_at=start_At)
@@ -53,8 +53,11 @@ class Boat_Receiver(CyclicBehaviour):
                 info=aux.get_type()
                 if info=="FULLQUEUE":
                     self.set("inqueue", False)
+                    print("\033[91m Rejected because FullQueue "+self.agent.get("id")+"\033[0m"+"\n")
                 if info=="NOPARKS":
                     self.set("inqueue", False)
+                    print("\033[91m Rejected because NoParks "+self.agent.get("id")+"\033[0m"+"\n")
+
 
             elif msg.get_metadata("performative") == ("propose"):
                 aux=jsonpickle.decode(msg.body)
@@ -64,8 +67,8 @@ class Boat_Receiver(CyclicBehaviour):
 
                     if int(partido[1]) +1 <= int(partido[3]):
                         self.set("inqueue", True)
-                        print("ACCEPT QUEUE " + self.agent.get("id"))
                         response = Message(to= self.agent.get("lighthouse"))
+                        print("\033[32mAccepted QUEUE in"+self.agent.get("id")+"\033[0m")
                         response.set_metadata("performative", "accept_proposal")
                         response.body = jsonpickle.encode(
                         Message_Info(f"ACCEPTQUEUE&{partido[2]}", BoatInfo(self.agent.get("jid"),self.agent.get("type"),self.agent.get("brand"),self.agent.get("origin"),self.agent.get("destination"),self.agent.get("fuel"),self.agent.get("status"),self.agent.get("cais"),self.agent.get("channel"))))
@@ -79,6 +82,7 @@ class Boat_Receiver(CyclicBehaviour):
 
                     else:
                         self.agent.set("inqueue", False)
+                        print("\033[32mRejected QUEUE in Boat" + self.agent.jid + "\033[0m")
                         response = Message(to=self.agent.get("lighthouse"))
                         response.set_metadata("performative", "reject_proposal")
                         response.body = jsonpickle.encode(
