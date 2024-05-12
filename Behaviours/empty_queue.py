@@ -26,20 +26,25 @@ class EmptyQueue(OneShotBehaviour):
 
 
     async def run(self):
+        print("Tratar a queue")
         queue=self.agent.get("Queue")
         if len(queue)>0:
+
             old=self.getoldest(queue)
             type= old[0]
 
             if type=="WAITING2PARK":
+                print("o tipo de quem vou tratar é waiting 2 park")
                 boat=old[1]
                 empty_channels = self.agent.getemptychannels()
                 if len(empty_channels) > 0:
                     if boat.get_type() == "Private":
                         if self.agent.get("CaisOccupied") < self.agent.get("CaisTotal"):
+                            print("aceitei privado")
                             permission = Permission_Cais(boat, empty_channels)
                             self.agent.add_behaviour(permission)
                         else :
+                            print("recusei pq n ha parques privados")
                             self.agent.set("Queue",
                                            [i for i in self.agent.get("Queue") if i[1].get_id() != boat.get_id()])
                             behav3 = Refuse(boat, "NOPARKS")

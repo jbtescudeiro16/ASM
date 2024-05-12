@@ -150,7 +150,18 @@ class ReceiveParking(CyclicBehaviour):
             elif msg.get_metadata("performative") == ("reject_proposal"):
 
                 canceled= self.agent.get("Canceled")
-                self.agent.get("Canceled",canceled+1)
+                self.agent.set("Canceled",canceled+1)
+
+            elif msg.get_metadata("performative") == ("cancel"):
+                aux = jsonpickle.decode(msg.body)
+                #print("recebi cancel no farol, vou remover da queue" + aux.get_boatinfo().get_id())
+                print("\033[91mRecebi um pedido para cancelar"+ aux.get_boatinfo().get_id()+"\033[0m")
+                self.agent.set("Queue",
+                               [i for i in self.agent.get("Queue") if i[1].get_id() != aux.get_boatinfo().get_id()])
+
+                canceled = self.agent.get("Canceled")
+                self.agent.set("Canceled", canceled + 1)
+
 
 
 

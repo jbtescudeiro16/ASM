@@ -73,9 +73,9 @@ class Marine:
                 boat.set("jid", boat_jid)
                 boat.set("lighthouse", lighthousejid)
                 if i < 10:
-                   boat.set("status", "permission2Leave")
+                #   boat.set("status", "permission2Leave")
                 #else :
-                #    boat.set("status", "permission2Park")
+                   boat.set("status", "permission2Park")
 
 
                 boats[f'boat{i}'] = boat

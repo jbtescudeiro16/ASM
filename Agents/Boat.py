@@ -12,6 +12,8 @@ class Boat(agent.Agent):
     def __str__(self):
         return f'''Boat:Jid: {self.get("jid")}  |Type:{self.get("type")} | Brand: {self.get("brand")} | Origin: {self.get("origin")} | Destination: {self.get("destination")} | Fuel: {self.get("fuel")} | status: {self.get("status")}| Cais: {self.get("cais")},Channel: {self.get("channel")}'''
     async def setup(self):
+        self.set("flag", True)
+        self.set("inqueue", False)
         brands = ["Sunseeker", "Beneteau", "Azimut", "Ferretti Yachts", "Princess Yachts",
                   "Sea Ray", "Jeanneau", "Bayliner", "Boston Whaler", "Riva"]
 
@@ -46,4 +48,10 @@ class Boat(agent.Agent):
         #self.myinfo = BoatInfo(self.jid, brand, origin,destination,fuel,self.get("status"),dock,channel)
         #print(self.myinfo.to_string())
 
+    def setinqueuetrue(self):
+        if self.get("inqueue")==False:
+            self.set("inqueue",True)
 
+    def setinqueuefalse(self):
+        if self.get("inqueue") == True:
+            self.set("inqueue", False)
