@@ -47,4 +47,4 @@ class BoatInfo:
 
 
     def __str__(self):
-        return "Boat: "+str(self.id) +"|Type: "+ self.type + "| Brand :" + self.brand +"| Origin:" +self.origin +"| Destination:" +self.destination + "| Fuel:" + str(self.fuel) + "| cais:" +str(self.cais)
+        return "Boat: "+str(self.id) +"|Type: "+ self.type + "| Brand :" + self.brand +"| Origin:" +self.origin +"| Destination:" +self.destination + "| Fuel:" + str(self.fuel)

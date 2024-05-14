@@ -44,7 +44,7 @@ class ReceiveParking(CyclicBehaviour):
                                 channel.get_boat()) + " ➡️ " + channel.get_state_boat()
                         info_channels += "    " + str(colored(channel.get_id(), "yellow")) + ". " + info + " $ "
 
-                    reply_msg.body = f"Cais Privados> {self.agent.get('CaisTotal')}"+ " " * 130+"\033[34m Weather: \033[0m"+self.agent.get('Weather') +f" \n Cais Occupied> {self.agent.get('CaisOccupied')} \n Commercial Cais > {self.agent.get('DescargasTotal')} \n Commercial Cais Occupied> {self.agent.get('DescargasOccupied')} \n Queue> {queue} \n Boats In Operation> {info_channels}"
+                    reply_msg.body = f"Cais Privados> {self.agent.get('CaisTotal')}"+ " " * 30+"\033[34m Weather: \033[0m"+self.agent.get('Weather') +f" \n Cais Occupied> {self.agent.get('CaisOccupied')} \n Commercial Cais > {self.agent.get('DescargasTotal')} \n Commercial Cais Occupied> {self.agent.get('DescargasOccupied')} \n Queue> {queue} \n Boats In Operation> {info_channels}"
                     reply_msg.set_metadata("performative", "inform")
                     await self.send(reply_msg)
 

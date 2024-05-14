@@ -22,7 +22,7 @@ class ParkFinished(TimeoutBehaviour):
         self.agent.set("Origin", destination)
         self.agent.set("Destination", origin)
         self.agent.set("Fuel", 100)
-
+        self.agent.set("status","permission2Leave")
         start_At = datetime.datetime.now() + datetime.timedelta(seconds=15)
         beh1 = TimeoutToUndock(start_at=start_At)
         self.agent.add_behaviour(beh1)

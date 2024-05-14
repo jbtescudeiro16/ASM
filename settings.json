@@ -2,10 +2,10 @@
   "jid": "@jbtescudeiro16-vivobook-asuslaptop-x1605za-f1605za",
   "pass": "NOPASSWORD",
   "arriving": 10,
-  "leaving": 3,
-  "channels": 1,
-  "cais": 3,
-  "descargas": 2,
+  "leaving": 4,
+  "channels": 2,
+  "cais": 10,
+  "descargas": 8,
   "maxboats2park": 4,
   "weather": "Sunny"
 }
