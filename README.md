@@ -7,28 +7,28 @@ O trabalho prático propunha a utilização da bilioteca SPADE para a construç�
 ## Estrutura
 O repositório está organizado da seguinte forma :
 ```
-- **Agents**
+- Agents
   - Contém os ficheiros relacionados com agentes.
 
-- **Behaviours**
+- Behaviours
   - Contém os ficheiros relacionados aos comportamentos dos agentes.
 
-- **Class**
+- Class
   - Contém os ficheiros referentes às classes auxiliares utilizadas na conceção da marina.
 
-- **Docs**
+- Docs
   - Contém o relatório do TP, bem como o trabalho de investigação e as revisões feitas aos outros artigos.
 
-- **Marina.py**
+- Marina.py
   - Script que inicializa e é responsável por fazer a Marina funcionar.
 
-- **README.md**
+- README.md
   - Descrição do repositório.
 
-- **results.json**
+- results.json
   - Ficheiro resultado que contém as informações do porto(total de partidas, chegadas e operações canceladas), depois de o programa acabar .
 
-- **settings.json**
+- settings.json
   - Contém as configurações utilizadas para dar início à Marina.
 ```
 ## Modo de Funcionamento
