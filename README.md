@@ -24,3 +24,6 @@ O repositório está organizado da seguinte forma :
 - settings.json- Contém as configurações utilizadas para dar início à Marina.
 ```
 ## Modo de Funcionamento
+
+Para o processo de inicialização, é lido do ficheiro de confirguração, o número de barcos que se encontram atracados no cais e pretendem abandonar, o número de barcos que se encontram fora do porto e pretendem atracar, o número de canais que dão acesso ao porto, e o número de cais de cada tipo disponíveis para os barcos conseguirem atracar.
+
