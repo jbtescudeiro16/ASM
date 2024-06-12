@@ -4,6 +4,7 @@ Este repositório contém o material utilizado na unidade curricular de **Agente
 
 O trabalho prático propunha a utilização da bilioteca SPADE para a construção de um sistema multiagente, baseado em agentes e na comunicação entre eles. Decidimos optar por construir um **porto Marítimo** em que os agentes principais são o Barco, o Farol, o gestor de cais e a Polícia Marítima
 
+## Estrutura
 O repositório está organizado da seguinte forma :
 ```
 - **Agents**
@@ -30,3 +31,4 @@ O repositório está organizado da seguinte forma :
 - **settings.json**
   - Contém as configurações utilizadas para dar início à Marina.
 ```
+## Modo de Funcionamento
