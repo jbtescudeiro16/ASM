@@ -16,7 +16,7 @@ O repositório está organizado da seguinte forma :
   - Contém os ficheiros referentes às classes auxiliares utilizadas na conceção da marina.
 
 - **Docs**
-  - `Contém o relatório do TP, bem como o trabalho de investigação e as revisões feitas aos outros artigos.
+  - Contém o relatório do TP, bem como o trabalho de investigação e as revisões feitas aos outros artigos.
 
 - **Marina.py**
   - Script que inicializa e é responsável por fazer a Marina funcionar.
